@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>reply to post</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <a class="logo" href="index.html" title="home">CL</a>
+    <nav class="crumbs">
+      <a href="index.html">&laquo; back to post</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <div class="formbox">
+      <h2>reply to this post</h2>
+      <p class="re">re: [AD TITLE] ([location])</p>
+
+      <form id="reply-form" action="https://api.web3forms.com/submit" method="POST">
+        <!-- Web3Forms: get a free key at web3forms.com using adlankj@gmail.com -->
+        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+        <input type="hidden" name="subject" value="New reply to your ad">
+        <input type="hidden" name="from_name" value="Ad reply form">
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
+
+        <div class="field">
+          <label for="name">name <span class="req">*</span></label>
+          <input type="text" id="name" name="name" required autocomplete="name">
+        </div>
+
+        <div class="field">
+          <label for="email">email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+
+        <div class="field">
+          <label for="phone">phone <span class="hint">(optional)</span></label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel">
+        </div>
+
+        <!-- ===== CUSTOM QUESTIONS: replace these examples ===== -->
+        <div class="field">
+          <label for="q1">[Custom question 1, free text]</label>
+          <input type="text" id="q1" name="[question 1]">
+        </div>
+
+        <div class="field">
+          <label for="q2">[Custom question 2, dropdown]</label>
+          <select id="q2" name="[question 2]">
+            <option value="">-- choose --</option>
+            <option>[option A]</option>
+            <option>[option B]</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>[Custom question 3, yes/no]</label>
+          <div class="choices">
+            <label><input type="radio" name="[question 3]" value="yes"> yes</label>
+            <label><input type="radio" name="[question 3]" value="no"> no</label>
+          </div>
+        </div>
+        <!-- ==================================================== -->
+
+        <div class="field">
+          <label for="message">message <span class="req">*</span></label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+
+        <button type="submit" class="reply-btn">send reply</button>
+        <div id="status" class="status" role="status"></div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('reply-form');
+    const status = document.getElementById('status');
+    const btn = form.querySelector('button[type="submit"]');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.className = 'status';
+      btn.disabled = true;
+      btn.textContent = 'sending...';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(form)
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'send failed');
+
+        window.location.href = 'sent.html';
+      } catch (err) {
+        status.textContent = 'Something went wrong (' + err.message + '). Please try again.';
+        status.className = 'status err';
+        btn.disabled = false;
+        btn.textContent = 'send reply';
+      }
+    });
+  </script>
+</body>
+</html>

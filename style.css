@@ -1,0 +1,220 @@
+/* Classic-classifieds look: plain, dense, blue links, grey bars. */
+* { box-sizing: border-box; }
+
+html { background: #fff; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #222;
+  background: #fff;
+}
+
+a { color: #00e; }
+a:visited { color: #551a8b; }
+
+/* ---------- top bar / breadcrumbs ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 4px 8px;
+  background: #eee;
+  border-bottom: 1px solid #ccc;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid #800080;
+  border-radius: 50%;
+  color: #800080;
+  font-weight: bold;
+  font-size: 12px;
+  text-decoration: none;
+  background: #fff;
+}
+.logo:visited { color: #800080; }
+
+.crumbs { flex: 1; min-width: 0; }
+.crumbs a { text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+.crumbs .sep { color: #999; margin: 0 3px; }
+
+.toplinks a { margin-left: 10px; text-decoration: none; }
+
+/* ---------- posting ---------- */
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px 16px 40px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.actions .minor a {
+  color: #00e;
+  font-size: 13px;
+  margin-right: 10px;
+}
+
+.reply-btn {
+  display: inline-block;
+  padding: 4px 14px;
+  font: bold 14px Arial, Helvetica, sans-serif;
+  color: #fff;
+  background: #6d4ad1;
+  border: 1px solid #5a3cb3;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.reply-btn:visited { color: #fff; }
+.reply-btn:hover { background: #5a3cb3; }
+
+.posttitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 0 14px;
+}
+.posttitle .price { color: #222; margin-right: 6px; }
+.posttitle .loc { font-weight: normal; color: #555; }
+
+.layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.body { flex: 1; min-width: 0; }
+.body p { margin: 0 0 1em; }
+.body ul { margin: 0 0 1em; padding-left: 20px; }
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.attrgroup {
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+}
+.attrgroup span { display: block; margin: 2px 0; }
+.attrgroup b { font-weight: bold; }
+
+.qrlink {
+  font-size: 12px;
+  color: #999;
+  margin: 0 0 1em;
+}
+
+.sent-box {
+  max-width: 560px;
+  border: 1px solid #9c9;
+  background: #eaf6e8;
+  padding: 14px 16px;
+}
+.sent-box h2 { font-size: 16px; margin: 0 0 8px; color: #262; }
+.sent-box p { margin: 0 0 8px; }
+
+.notices {
+  font-size: 13px;
+  color: #555;
+  padding-left: 18px;
+  margin: 12px 0;
+}
+
+.postinginfo {
+  font-size: 12px;
+  color: #555;
+  margin: 2px 0;
+}
+
+footer {
+  margin-top: 30px;
+  padding-top: 8px;
+  border-top: 1px solid #ccc;
+  font-size: 12px;
+  color: #777;
+}
+footer a { margin-right: 10px; }
+
+/* ---------- reply form page ---------- */
+.formbox {
+  max-width: 560px;
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+  padding: 14px 16px;
+}
+
+.formbox h2 {
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+.formbox .re {
+  font-size: 13px;
+  color: #555;
+  margin: 0 0 14px;
+}
+
+.field { margin-bottom: 12px; }
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+.field .req { color: #c00; }
+.field .hint { font-weight: normal; font-size: 12px; color: #777; }
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="tel"],
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 4px 6px;
+  font: 14px Arial, Helvetica, sans-serif;
+  border: 1px solid #aaa;
+  background: #fff;
+  color: #222;
+}
+.field textarea { min-height: 120px; resize: vertical; }
+
+.choices label {
+  display: inline-block;
+  font-weight: normal;
+  margin-right: 14px;
+}
+
+.hp { position: absolute; left: -9999px; }
+
+.status {
+  margin-top: 12px;
+  padding: 8px 10px;
+  border: 1px solid;
+  display: none;
+}
+.status.ok { display: block; background: #eaf6e8; border-color: #9c9; color: #262; }
+.status.err { display: block; background: #fbeaea; border-color: #d99; color: #822; }
+
+/* ---------- phone ---------- */
+@media (max-width: 700px) {
+  .layout { flex-direction: column-reverse; }
+  .sidebar { width: 100%; }
+  .toplinks { display: none; }
+  .posttitle { font-size: 18px; }
+}
