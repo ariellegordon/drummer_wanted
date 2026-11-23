@@ -194,6 +194,9 @@ footer a { margin-right: 10px; }
 }
 .field textarea { min-height: 120px; resize: vertical; }
 
+fieldset.choices-group { border: 0; padding: 0; margin: 0 0 12px; min-width: 0; }
+fieldset.choices-group legend { font-weight: bold; margin-bottom: 3px; padding: 0; }
+
 .choices label {
   display: inline-block;
   font-weight: normal;

@@ -18,11 +18,10 @@
   <main class="wrap">
     <div class="formbox">
       <h2>reply to this post</h2>
-      <p class="re">re: [AD TITLE] ([location])</p>
+      <p class="re">re: Drummer (Brooklyn, NY)</p>
 
       <form id="reply-form" action="https://api.web3forms.com/submit" method="POST">
-        <!-- Web3Forms: get a free key at web3forms.com using adlankj@gmail.com -->
-        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+        <input type="hidden" name="access_key" value="752fddf7-802a-40a7-b5ad-2207fbaecd96">
         <input type="hidden" name="subject" value="New reply to your ad">
         <input type="hidden" name="from_name" value="Ad reply form">
         <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
@@ -42,34 +41,40 @@
           <input type="tel" id="phone" name="phone" autocomplete="tel">
         </div>
 
-        <!-- ===== CUSTOM QUESTIONS: replace these examples ===== -->
         <div class="field">
-          <label for="q1">[Custom question 1, free text]</label>
-          <input type="text" id="q1" name="[question 1]">
+          <label for="q1">What is your name, and where do you live? <span class="req">*</span></label>
+          <input type="text" id="q1" name="[question 1]" required>
         </div>
 
         <div class="field">
-          <label for="q2">[Custom question 2, dropdown]</label>
-          <select id="q2" name="[question 2]">
-            <option value="">-- choose --</option>
-            <option>[option A]</option>
-            <option>[option B]</option>
-          </select>
+          <label for="q2">How many hours are you available to practice and write on most weeks? <span class="req">*</span></label>
+          <input type="text" id="q2" name="hours available" required>
         </div>
 
-        <div class="field">
-          <label>[Custom question 3, yes/no]</label>
+        <fieldset class="field choices-group">
+          <legend>Have you heard of any of these drummers? <span class="req">*</span></legend>
           <div class="choices">
-            <label><input type="radio" name="[question 3]" value="yes"> yes</label>
-            <label><input type="radio" name="[question 3]" value="no"> no</label>
+            <label><input type="checkbox" name="drummers heard of" value="Christopher Bear"> Christopher Bear</label>
+            <label><input type="checkbox" name="drummers heard of" value="Noah Lennox"> Noah Lennox</label>
+            <label><input type="checkbox" name="drummers heard of" value="John Stanier"> John Stanier</label>
+            <label><input type="checkbox" name="drummers heard of" value="Steve Jordan"> Steve Jordan</label>
+            <label><input type="checkbox" name="drummers heard of" value="Tom Skinner"> Tom Skinner</label>
+            <label><input type="checkbox" name="drummers heard of" value="Jaki Liebezeit"> Jaki Liebezeit</label>
+            <label><input type="checkbox" name="drummers heard of" value="Phil Melanson"> Phil Melanson</label>
+            <label><input type="checkbox" name="drummers heard of" value="None of these"> none of these</label>
           </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="q4">Would you count any of the above drummers as influences? <span class="req">*</span></label>
+          <input type="text" id="q4" name="drummer influences" required>
+        </div>
+
+        <div class="field">
+          <label for="q5">How would you briefly describe your style of drumming? <span class="req">*</span></label>
+          <input type="text" id="q5" name="drumming style" required>
         </div>
         <!-- ==================================================== -->
-
-        <div class="field">
-          <label for="message">message <span class="req">*</span></label>
-          <textarea id="message" name="message" required></textarea>
-        </div>
 
         <button type="submit" class="reply-btn">send reply</button>
         <div id="status" class="status" role="status"></div>
@@ -82,6 +87,16 @@
     const status = document.getElementById('status');
     const btn = form.querySelector('button[type="submit"]');
 
+    // Checkbox groups: require at least one box ticked per group.
+    const groups = [...form.querySelectorAll('.choices-group')].map(g =>
+      [...g.querySelectorAll('input[type="checkbox"]')]);
+    const checkGroups = () => groups.forEach(boxes => {
+      const ok = boxes.some(b => b.checked);
+      boxes[0].setCustomValidity(ok ? '' : 'Please check at least one box.');
+    });
+    groups.flat().forEach(b => b.addEventListener('change', checkGroups));
+    checkGroups();
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       status.className = 'status';
@@ -89,10 +104,18 @@
       btn.textContent = 'sending...';
 
       try {
+        // Collapse multi-select fields (checkbox groups) into one
+        // comma-separated value so every choice reaches the email.
+        const fd = new FormData(form);
+        const body = new FormData();
+        for (const key of new Set(fd.keys())) {
+          body.append(key, fd.getAll(key).join(', '));
+        }
+
         const res = await fetch(form.action, {
           method: 'POST',
           headers: { 'Accept': 'application/json' },
-          body: new FormData(form)
+          body
         });
         const data = await res.json();
         if (!res.ok || !data.success) throw new Error(data.message || 'send failed');
